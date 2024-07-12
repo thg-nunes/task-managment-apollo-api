@@ -23,7 +23,9 @@
   },
   "dependencies": {
     "@apollo/server": "^4.10.4",
+    "@prisma/client": "^5.16.2",
     "dotenv": "^16.4.5",
-    "graphql": "^16.9.0"
+    "graphql": "^16.9.0",
+    "prisma": "^5.16.2"
   }
 }
