@@ -11,7 +11,8 @@
     "types": ["node"],
     "paths": {
       "@schema/*": ["src/graphql/schema/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@services/*": ["src/services/*"]
     }
   }
 }
