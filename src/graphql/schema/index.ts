@@ -1,3 +1,6 @@
+import { userResolvers } from './user/resolvers'
+import { userTypeDefs } from './user/typeDefs'
+
 const rootTypeDef = `#graphql
   type Query {
     _empty: Boolean
@@ -10,5 +13,5 @@ const rootrResolvers = {
   },
 }
 
-export const typeDefs = [rootTypeDef]
-export const resolvers = [rootrResolvers]
+export const typeDefs = [rootTypeDef, userTypeDefs]
+export const resolvers = [rootrResolvers, userResolvers]
