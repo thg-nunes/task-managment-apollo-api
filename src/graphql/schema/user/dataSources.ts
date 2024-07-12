@@ -31,7 +31,10 @@ export class UserDataSource {
     return { id: user.id, email: user.email }
   }
 
-  async register(data: { email: string; password: string }): Promise<User> {
+  async register(data: {
+    email: string
+    password: string
+  }): Promise<Omit<User, 'password'>> {
     for (const field in data) {
       if (!data[field])
         throw new AppError(`O ${field} não pode ser nulo.`, 'BAD_USER_INPUT')
@@ -49,6 +52,14 @@ export class UserDataSource {
 
     const passwordHash = await bcrypt.hash(password, 12)
 
-    return await prisma.user.create({ data: { email, password: passwordHash } })
+    return await prisma.user.create({
+      data: { email, password: passwordHash },
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    })
   }
 }
