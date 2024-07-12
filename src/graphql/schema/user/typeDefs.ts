@@ -1,4 +1,8 @@
 export const userTypeDefs = `#graphql
+  type Query {
+    login(loginInput: LoginInput!): LoginResponse!
+  }
+
   type Mutation {
     register(registerInput: RegisterInput!): User!
   }
@@ -10,6 +14,15 @@ export const userTypeDefs = `#graphql
     updatedAt: String
   }
 
+  type LoginResponse {
+    id: ID!
+    email: String!
+  }
+
+  input LoginInput {
+    email: String!
+    password: String!
+  }
 
   input RegisterInput {
     email: String!
