@@ -34,7 +34,7 @@ export class UserDataSource {
   async register(data: {
     email: string
     password: string
-  }): Promise<Omit<User, 'password'>> {
+  }): Promise<Omit<User, 'password' | 'token' | 'refresh_token'>> {
     for (const field in data) {
       if (!data[field])
         throw new AppError(`O ${field} não pode ser nulo.`, 'BAD_USER_INPUT')
@@ -52,8 +52,19 @@ export class UserDataSource {
 
     const passwordHash = await bcrypt.hash(password, 12)
 
+    const token = jwt.sign({ email }, process.env.TOKEN_SECRET_KEY, {
+      expiresIn: '1d',
+    })
+    const refresh_token = jwt.sign(
+      { email },
+      process.env.REFRESH_TOKEN_SECRET_KEY,
+      {
+        expiresIn: '7d',
+      },
+    )
+
     return await prisma.user.create({
-      data: { email, password: passwordHash },
+      data: { email, password: passwordHash, token, refresh_token },
       select: {
         id: true,
         email: true,
