@@ -1,4 +1,3 @@
-import { User } from '@prisma/client'
 import { Context } from '@schema/context'
 
 /**

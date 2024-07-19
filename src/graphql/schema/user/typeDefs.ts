@@ -17,6 +17,8 @@ export const userTypeDefs = `#graphql
   type LoginResponse {
     id: ID!
     email: String!
+    token: String!
+    refresh_token: String!
   }
 
   input LoginInput {
