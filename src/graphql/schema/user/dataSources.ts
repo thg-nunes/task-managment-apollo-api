@@ -4,6 +4,7 @@ import { User } from '@prisma/client'
 
 import { prisma } from '@services/prisma'
 import { AppError } from '@utils/appError'
+import { createNewTokenAndRefreshToken, refreshTokenIsValid } from '@utils/jts'
 
 export class UserDataSource {
   async login(data: {
@@ -83,6 +84,23 @@ export class UserDataSource {
         createdAt: true,
         updatedAt: true,
       },
+    })
+  }
+
+  async refresh_token(refresh_token: string) {
+    if (!refresh_token)
+      throw new AppError('Refresh token não encontrado', 'BAD_REQUEST')
+
+    const payload = refreshTokenIsValid(refresh_token)
+
+    const { token, refresh_token: refresh } = createNewTokenAndRefreshToken(
+      payload.email,
+    )
+
+    return await prisma.user.update({
+      where: { email: payload.email },
+      data: { token, refresh_token: refresh },
+      select: { token: true, refresh_token: true },
     })
   }
 }
