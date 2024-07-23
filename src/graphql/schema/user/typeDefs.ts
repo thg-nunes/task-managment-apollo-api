@@ -5,6 +5,7 @@ export const userTypeDefs = `#graphql
 
   type Mutation {
     register(registerInput: RegisterInput!): User!
+    refreshToken: RefreshTokenResponse!
   }
 
   type User {
@@ -17,6 +18,11 @@ export const userTypeDefs = `#graphql
   type LoginResponse {
     id: ID!
     email: String!
+    token: String!
+    refresh_token: String!
+  }
+
+  type RefreshTokenResponse {
     token: String!
     refresh_token: String!
   }
