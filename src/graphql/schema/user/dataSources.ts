@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import { User } from '@prisma/client'
 
 import { prisma } from '@services/prisma'
@@ -65,16 +64,7 @@ export class UserDataSource {
 
     const passwordHash = await bcrypt.hash(password, 12)
 
-    const token = jwt.sign({ email }, process.env.TOKEN_SECRET_KEY, {
-      expiresIn: '1d',
-    })
-    const refresh_token = jwt.sign(
-      { email },
-      process.env.REFRESH_TOKEN_SECRET_KEY,
-      {
-        expiresIn: '7d',
-      },
-    )
+    const { token, refresh_token } = createNewTokenAndRefreshToken(email)
 
     return await prisma.user.create({
       data: { email, password: passwordHash, token, refresh_token },
