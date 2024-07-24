@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt, { TokenExpiredError } from 'jsonwebtoken'
 import { AppError } from './appError'
 
 /**
@@ -64,14 +64,23 @@ const createNewTokenAndRefreshToken = (email: string) => {
  * com valor 'true', caso contrário um erro é lançado
  */
 const userIsAuthenticated = (cookie: string) => {
-  const token = cookie
-    ?.split('; ')
-    ?.find((cookie) => cookie.startsWith('token='))
-    ?.split('=')[1]
+  try {
+    const token = cookie
+      ?.split('; ')
+      ?.find((cookie) => cookie.startsWith('token='))
+      ?.split('=')[1]
 
-  const payload = jwt.verify(token, process.env.TOKEN_SECRET_KEY)
+    const payload = jwt.verify(token, process.env.TOKEN_SECRET_KEY, {
+      ignoreExpiration: false,
+    }) as { email: string }
 
-  console.log(!!payload)
+    return !!payload.email
+  } catch (err) {
+    if (err instanceof TokenExpiredError)
+      throw new AppError('Token expirado', 'BAD_REQUEST')
+
+    throw new AppError('Token inválido', 'FORBIDDEN')
+  }
 }
 
 /**
