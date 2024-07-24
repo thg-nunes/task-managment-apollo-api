@@ -1,10 +1,9 @@
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import { User } from '@prisma/client'
 
 import { prisma } from '@services/prisma'
 import { AppError } from '@utils/appError'
-import { createNewTokenAndRefreshToken, refreshTokenIsValid } from '@utils/jts'
+import { createNewTokenAndRefreshToken, refreshTokenIsValid } from '@utils/jwt'
 
 export class UserDataSource {
   async login(data: {
@@ -65,16 +64,7 @@ export class UserDataSource {
 
     const passwordHash = await bcrypt.hash(password, 12)
 
-    const token = jwt.sign({ email }, process.env.TOKEN_SECRET_KEY, {
-      expiresIn: '1d',
-    })
-    const refresh_token = jwt.sign(
-      { email },
-      process.env.REFRESH_TOKEN_SECRET_KEY,
-      {
-        expiresIn: '7d',
-      },
-    )
+    const { token, refresh_token } = createNewTokenAndRefreshToken(email)
 
     return await prisma.user.create({
       data: { email, password: passwordHash, token, refresh_token },
