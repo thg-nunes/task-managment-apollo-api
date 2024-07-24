@@ -58,4 +58,39 @@ const createNewTokenAndRefreshToken = (email: string) => {
   return { token, refresh_token }
 }
 
-export { tokenIsValid, refreshTokenIsValid, createNewTokenAndRefreshToken }
+/**
+ * @function userIsAuthenticated - verifica se o token está presente nos cookies se é válido
+ * @returns {boolean} - se o token for estiver presente nos cookies e for válido é retornado um boolean
+ * com valor 'true', caso contrário um erro é lançado
+ */
+const userIsAuthenticated = (cookie: string) => {
+  const token = cookie
+    ?.split('; ')
+    ?.find((cookie) => cookie.startsWith('token='))
+    ?.split('=')[1]
+
+  const payload = jwt.verify(token, process.env.TOKEN_SECRET_KEY)
+
+  console.log(!!payload)
+}
+
+/**
+ * @function getRefreshTokenValueFromCookie - obtém o refresh token dos cookies
+ * @returns {boolean} - retorna o valor do refresh token
+ */
+const getRefreshTokenValueFromCookie = (cookie: string) => {
+  const refresh_token = cookie
+    ?.split('; ')
+    ?.find((cookie) => cookie.startsWith('refresh_token='))
+    ?.split('=')[1]
+
+  return refresh_token
+}
+
+export {
+  tokenIsValid,
+  refreshTokenIsValid,
+  userIsAuthenticated,
+  getRefreshTokenValueFromCookie,
+  createNewTokenAndRefreshToken,
+}

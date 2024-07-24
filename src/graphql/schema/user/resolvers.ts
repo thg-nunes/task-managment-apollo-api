@@ -1,4 +1,5 @@
 import { Context } from '@schema/context'
+import { getRefreshTokenValueFromCookie } from '@utils/jwt'
 
 /**
  * @async
@@ -14,11 +15,6 @@ const login = async (
   const { token, refresh_token, ...rest } = await dataSources.user.login({
     ...loginInput,
   })
-
-  res.setHeader('Set-Cookie', [
-    `token=${token}`,
-    `refresh_token=${refresh_token}`,
-  ])
 
   return { token, refresh_token, ...rest }
 }
@@ -42,11 +38,7 @@ const register = async (
  * @returns {{token: string, refresh_token: string}} - retorna um objeto com o novo token e refresh token
  */
 const refreshToken = async (_, __, { dataSources, req }: Context) => {
-  const refresh_token = req.headers.cookie
-    ?.split('; ')
-    ?.find((cookie) => cookie.startsWith('refresh_token='))
-    ?.split('=')[1]
-
+  const refresh_token = getRefreshTokenValueFromCookie(req.headers.cookie)
   return await dataSources.user.refresh_token(refresh_token)
 }
 

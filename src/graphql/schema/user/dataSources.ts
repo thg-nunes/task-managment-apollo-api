@@ -4,7 +4,7 @@ import { User } from '@prisma/client'
 
 import { prisma } from '@services/prisma'
 import { AppError } from '@utils/appError'
-import { createNewTokenAndRefreshToken, refreshTokenIsValid } from '@utils/jts'
+import { createNewTokenAndRefreshToken, refreshTokenIsValid } from '@utils/jwt'
 
 export class UserDataSource {
   async login(data: {
