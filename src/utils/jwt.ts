@@ -70,11 +70,9 @@ const userIsAuthenticated = (cookie: string) => {
       ?.find((cookie) => cookie.startsWith('token='))
       ?.split('=')[1]
 
-    const payload = jwt.verify(token, process.env.TOKEN_SECRET_KEY, {
+    jwt.verify(token, process.env.TOKEN_SECRET_KEY, {
       ignoreExpiration: false,
-    }) as { email: string }
-
-    return !!payload.email
+    })
   } catch (err) {
     if (err instanceof TokenExpiredError)
       throw new AppError('Token expirado', 'BAD_REQUEST')
