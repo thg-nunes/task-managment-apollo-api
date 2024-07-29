@@ -15,4 +15,30 @@ model User {
   refresh_token String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  tasks Task[]
+}
+
+model Task {
+  id          Int   @id @default(autoincrement())
+  title       String
+  description String?
+  dueDate     DateTime?
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  status      TaskStatus?
+  priority    LabelPriority?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum TaskStatus {
+  PENDING
+  CONPLETED
+  IN_PROGRESS
+}
+
+enum LabelPriority {
+  HIGH
+  MIDIUM
+  LOW
 }
