@@ -8,6 +8,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { Context } from '@schema/context'
 import { resolvers, typeDefs } from '@schema/index'
 import { UserDataSource } from '@schema/user/dataSources'
+import { TaskDataSource } from '@schema/task/datasource'
 
 const app = express()
 
@@ -33,6 +34,7 @@ async function startServer() {
           res,
           dataSources: {
             user: new UserDataSource(),
+            task: new TaskDataSource(),
           },
         }
       },

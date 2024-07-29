@@ -1,3 +1,5 @@
+import { taksResolvers } from './task/resolvers'
+import { taskTypeDefs } from './task/typeDefs'
 import { userResolvers } from './user/resolvers'
 import { userTypeDefs } from './user/typeDefs'
 
@@ -13,5 +15,5 @@ const rootrResolvers = {
   },
 }
 
-export const typeDefs = [rootTypeDef, userTypeDefs]
-export const resolvers = [rootrResolvers, userResolvers]
+export const typeDefs = [rootTypeDef, userTypeDefs, taskTypeDefs]
+export const resolvers = [rootrResolvers, userResolvers, taksResolvers]
