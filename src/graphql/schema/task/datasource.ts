@@ -52,4 +52,35 @@ export class TaskDataSource {
 
     return await prisma.task.create({ data })
   }
+
+  async totalUserTasks(userId: number) {
+    if (!userId)
+      throw new AppError('O id do usuário é obrigatório', 'BAD_REQUEST')
+
+    const tasksList = await prisma.task.findMany({ where: { userId } })
+
+    return tasksList.length
+  }
+
+  async totalUserCompletedTasks(userId: number) {
+    if (!userId)
+      throw new AppError('O id do usuário é obrigatório', 'BAD_REQUEST')
+
+    const completedTasksList = await prisma.task.findMany({
+      where: { userId, AND: { status: 'CONPLETED' } },
+    })
+
+    return completedTasksList.length
+  }
+
+  async totalUserPendingTasks(userId: number) {
+    if (!userId)
+      throw new AppError('O id do usuário é obrigatório', 'BAD_REQUEST')
+
+    const pendingTasksList = await prisma.task.findMany({
+      where: { userId, AND: { status: 'PENDING' } },
+    })
+
+    return pendingTasksList.length
+  }
 }
