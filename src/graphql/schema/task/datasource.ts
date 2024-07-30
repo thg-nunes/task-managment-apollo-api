@@ -61,4 +61,15 @@ export class TaskDataSource {
 
     return tasksList.length
   }
+
+  async totalUserCompletedTasks(userId: number) {
+    if (!userId)
+      throw new AppError('O id do usuário é obrigatório', 'BAD_REQUEST')
+
+    const completedTasksList = await prisma.task.findMany({
+      where: { userId, AND: { status: 'CONPLETED' } },
+    })
+
+    return completedTasksList.length
+  }
 }
