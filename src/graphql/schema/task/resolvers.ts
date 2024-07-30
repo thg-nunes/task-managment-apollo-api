@@ -48,7 +48,22 @@ const totalUserCompletedTasks = (
   return dataSources.task.totalUserCompletedTasks(userId)
 }
 
+/**
+ * @async
+ * @function totalUserPendingTasks - função responsável por retornar quantidade de tasks o usuário ainda precisa fazer
+ * @returns {{totalUserPendingTasks: number}} - retorna um objeto contendo o quantitativo de tasks o usuário ainda
+ * precisa fazer
+ */
+const totalUserPendingTasks = (
+  _,
+  { userId }: { userId: number },
+  { dataSources, req }: Context,
+) => {
+  userIsAuthenticated(req.headers.cookie)
+  return dataSources.task.totalUserPendingTasks(userId)
+}
+
 export const taksResolvers = {
-  Query: { totalUserTasks, totalUserCompletedTasks },
+  Query: { totalUserTasks, totalUserCompletedTasks, totalUserPendingTasks },
   Mutation: { createTask },
 }
