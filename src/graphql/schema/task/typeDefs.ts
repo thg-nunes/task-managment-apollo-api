@@ -1,4 +1,8 @@
 export const taskTypeDefs = `#graphql
+  type Query {
+    totalUserTasks(userId: Int!): Int!
+  }
+
   type Mutation {
     createTask(createTaskInput: CreateTaskInput!): Task!
   }

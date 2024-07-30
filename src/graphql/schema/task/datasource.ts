@@ -52,4 +52,13 @@ export class TaskDataSource {
 
     return await prisma.task.create({ data })
   }
+
+  async totalUserTasks(userId: number) {
+    if (!userId)
+      throw new AppError('O id do usuário é obrigatório', 'BAD_REQUEST')
+
+    const tasksList = await prisma.task.findMany({ where: { userId } })
+
+    return tasksList.length
+  }
 }
