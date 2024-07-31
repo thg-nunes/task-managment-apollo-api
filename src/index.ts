@@ -25,7 +25,10 @@ async function startServer() {
 
   app.use(
     '/graphql',
-    cors<cors.CorsRequest>({ origin: [`${process.env.WEB_APP_HOST}`] }),
+    cors<cors.CorsRequest>({
+      origin: [`${process.env.WEB_APP_HOST}`],
+      credentials: true,
+    }),
     express.json(),
     expressMiddleware(server, {
       context: async ({ req, res }) => {
